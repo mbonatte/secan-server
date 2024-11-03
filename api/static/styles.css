@@ -1,19 +1,25 @@
+/* General Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f0f8ff; /* Light blue background color */
-    margin-right: 10px;
-    margin-left: 10px;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 10px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
+/* Header Styling */
 header {
-  background-color: #aecbeb;
-  border-radius: 5px;
-  font-size: 30px;
-  padding: 10px;
-  margin-bottom: 10px;
-  display: grid;
-  grid-template-columns: repeat(2, 300px);
-  justify-content: space-between;
+    background-color: #aecbeb;
+    border-radius: 5px;
+    font-size: 30px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header img {
@@ -21,120 +27,154 @@ header img {
     margin-left: auto;
 }
 
+/* Main Layout */
 main {
-  display: grid;
-  grid-template-columns: 1.1fr 3fr 1fr;
-  grid-template-areas: "input-content canvas-content properties-info";
+    flex: 1;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+        "input-content"
+        "canvas-content"
+        "properties-info";
+    margin-bottom: 20px;
 }
 
+/* Responsive grid for larger screens */
+@media (min-width: 1024px) {
+    main {
+        grid-template-columns: 1.1fr 3fr 1fr;
+        grid-template-areas: "input-content canvas-content properties-info";
+    }
+}
+
+/* Input content section */
+.input-content {
+    grid-area: input-content;
+    width: 100%;
+    background-color: #aecbeb;
+    border-radius: 20px;
+    padding: 5px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
+
+.input-content nav {
+    margin: 10px;
+}
+
+.input-field {
+    margin: auto;
+    margin-top: 10px;
+    background-color: #ccddef;
+    width: 95%;
+    border-radius: 5px;
+    /* padding: 10px; */
+}
+
+/* @media (min-width: 1024px) { */
+    /* .input-field { */
+        /* height: 70%; */
+    /* } */
+/* } */
+
+#inputField {
+    margin-top: 10px;
+}
+
+#inputField fieldset {
+    padding: 10px;
+}
+
+
+/* Form inputs */
 input {
-    width: 50px;
+    width: 100%;
+    max-width: 150px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
+.geometry-inputs,
+.material-inputs {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* gap: 10px; */
+}
+
+@media (min-width: 768px) {
+    .geometry-inputs,
+    .material-inputs {
+        grid-template-columns: 70% 25%;
+    }
+}
+
+/* Button Styling */
 button {
     padding: 10px;
-    background-color: #007bff; /* Blue color, you can adjust as needed */
-    color: #fff; /* White text color */
+    background-color: #007bff; /* Blue color */
+    color: #fff; /* White text */
     border: none;
     border-radius: 5px;
     transition: background-color 0.3s;
     cursor: pointer;
+    /* width: 100%; */
+    /* max-width: 200px; */
+    margin: 5px 0;
+    /* min-height: 44px; */
+}
+
+button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+
+/* Canvas content section */
+.canvas-content {
+    grid-area: canvas-content;
 }
 
 canvas {
-  width: 100%;
-  height: 350px;
+    width: 100%;
+    height: auto;
+    min-height: 250px;
+    max-height: 300px;
 }
 
-#addedMaterials {
-    margin-left: 10px;
-    margin-top: 5px;
-}
-
-option:hover {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-.input-content {
-    grid-area: input-content;
-    width: 95%;
-    background-color: #aecbeb;
+.canvas-container {
+    padding: 15px;
+    background-color: #ffffff;
     border-radius: 20px;
-    margin-right: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
 }
 
-.input-content nav {
-    margin: 10px;
+.canvas-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.input-content nav {
-    margin: 10px;
+@media (min-width: 768px) {
+    .canvas-controls {
+        flex-direction: row;
+        justify-content: space-between;
+    }
 }
 
-.input-field{
-    margin: auto;
-    margin-top: 10px;
-    background-color: #ccddef;
-    height: 70%;
-    width: 95%;
-    border-radius: 5px;
-}
 
-#inputField{
-    margin-top: 10px;
-}
-
-#inputField fieldset{
-    padding: 10px;
-}
-
-.geometry-inputs,
-.material-inputs{
-    display: grid;
-    grid-template-columns: 70% 25%;
-}
-
-/* .properties-info table { */
-    /* width: 95%; */
-    /* margin: 0 auto; */
-    /* background-color: #ccddef; */
-    /* border-radius: 5px; */
-/* } */
-
-#additional-properties-container {
-    width: 95%;
-    margin: 0 auto;
-    margin-bottom: 10px;
-}
-
-#editMaterialForm {
-    background-color: #ccddef;
-    padding: 10px;
-    border-radius: 5px;
-}
-
-#editNameForm input {
-    width: 80px;
-}
-
-#editMaterialForm button {
-    margin-top: 10px;
-}
-
-.canvas-content {
-  grid-area: canvas-content;
-}
-
+/* Properties Section */
 .properties-info {
     grid-area: properties-info;
     background-color: #aecbeb;
     border-radius: 20px;
-    margin-left: 10px;
-    
+    padding: 5px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+    /* height: 100%; */
 }
 
 .properties-info h3 {
@@ -152,45 +192,51 @@ option:hover {
 }
 
 .properties-info td {
-    padding: 5px;
+    padding: 8px;
 }
 
 .properties-info td:first-child {
-  text-align: left;
+    text-align: left;
 }
 
 .properties-info td:last-child {
-  text-align: right;
+    text-align: right;
 }
 
 .properties-info .button-container {
-  width: 95%;
-  margin: 0 auto;
-  margin-top: auto;
-  margin-bottom: 10px;
+    width: 95%;
+    margin: 0 auto;
+    margin-top: auto;
+    margin-bottom: 10px;
 }
 
 
+/* Additional Elements */
 
-button:hover {
-    background-color: #0056b3; /* Darker shade of blue on hover */
+/* Added Materials section */
+#addedMaterials {
+    margin-left: 10px;
+    margin-top: auto;
+    margin-bottom: 10px;
 }
 
-.canvas-container {
-    padding: 20px;
-    background-color: #ffffff; /* White background for the canvas container */
-    border-radius: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle shadow effect */
+/* Material editing forms */
+#editMaterialForm {
+    background-color: #ccddef;
+    padding: 10px;
+    border-radius: 5px;
 }
 
-.canvas-controls {
-    display: grid;
-    grid-auto-flow: column;
-    justify-content: space-between;
+#editNameForm input {
+    width: 80px;
+}
+
+#editMaterialForm button {
+    margin-top: 10px;
 }
 
 
-
+/* Container visibility states */
 #geometryContainer {
     display: block;
 }
@@ -199,30 +245,44 @@ button:hover {
     display: none;
 }
 
+/* Option hover states */
+option:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Footer Styling */
 footer {
-  background-color: #fff;
-  background-image: url('secan-logo.png');
-  background-repeat: no-repeat;
-  background-position: right center;
-  background-size: 12%;
-  padding: 20px;
-  text-align: center;
-  margin-top: 10px;
-  border-radius: 20px;
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 20px;
+    margin-top: auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .footer-content {
-  max-width: 800px;
-  margin: 0 auto;
+    max-width: 100%;
+    padding: 0 15px;
 }
 
 .footer-content h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
+    font-size: 18px;
+    margin-bottom: 10px;
 }
 
 .footer-content p {
-  font-size: 14px;
-  line-height: 1.5;
-  margin-bottom: 5px;
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 5px;
+}
+
+/* Footer background image for larger screens */
+@media (min-width: 768px) {
+    footer {
+        background-image: url('secan-logo.png');
+        background-repeat: no-repeat;
+        background-position: right center;
+        background-size: 12%;
+    }
 }
