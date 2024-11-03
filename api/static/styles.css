@@ -140,6 +140,7 @@ canvas {
     height: auto;
     min-height: 250px;
     max-height: 300px;
+    touch-action: none;
 }
 
 .canvas-container {

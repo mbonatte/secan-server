@@ -27,6 +27,7 @@ class CanvasManager {
         this.isDragging = false;
         this.mouseStartX = 0;
         this.mouseStartY = 0;
+        this.lastTouchDistance = 0;
     }
     
     setupGeometry(geometryManager) {
@@ -47,7 +48,10 @@ class CanvasManager {
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
         this.canvas.addEventListener('wheel', this.handleMouseWheel.bind(this));
         
-        
+        // Touch events
+        this.canvas.addEventListener('touchstart', this.handleTouchStart.bind(this));
+        this.canvas.addEventListener('touchmove', this.handleTouchMove.bind(this));
+        this.canvas.addEventListener('touchend', this.handleTouchEnd.bind(this));
     }
  
   get projectionWidth() {
@@ -248,6 +252,91 @@ class CanvasManager {
 
     this.updateCanvas();
 }
+    
+    handleTouchStart(e) {
+        e.preventDefault();
+        this.isDragging = true;
+        
+        if (e.touches.length === 1) {
+            // Single touch for panning
+            this.startX = e.touches[0].clientX;
+            this.startY = e.touches[0].clientY;
+        } else if (e.touches.length === 2) {
+            // Two touches for pinch-zoom
+            this.lastTouchDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+        }
+    }
+    
+    handleTouchMove(e) {
+        e.preventDefault();
+        if (!this.isDragging) return;
+        
+        if (e.touches.length === 1) {
+            // Handle panning
+            const dx = (e.touches[0].clientX - this.startX) / this.scale;
+            const dy = (e.touches[0].clientY - this.startY) / this.scale;
+            
+            this.startX = e.touches[0].clientX;
+            this.startY = e.touches[0].clientY;
+            
+            this.offsetX -= dx;
+            this.offsetY += dy;
+            
+            this.updateCanvas();
+        } else if (e.touches.length === 2) {
+            // Handle pinch-zoom
+            const currentDistance = Math.hypot(
+                e.touches[0].clientX - e.touches[1].clientX,
+                e.touches[0].clientY - e.touches[1].clientY
+            );
+            
+            if (this.lastTouchDistance) {
+                const scale_factor = currentDistance / this.lastTouchDistance;
+                
+                // Only zoom if the change is significant enough
+                if (Math.abs(1 - scale_factor) > 0.02) {
+                    this.updateScale(scale_factor);
+                    this.updateCanvas();
+                }
+            }
+            
+            this.lastTouchDistance = currentDistance;
+        }
+    }
+    
+    handleTouchEnd(e) {
+        e.preventDefault();
+        this.isDragging = false;
+        this.lastTouchDistance = 0;
+        
+        // Handle tap for selection
+        if (e.changedTouches.length === 1) {
+            const touch = e.changedTouches[0];
+            const rect = this.canvas.getBoundingClientRect();
+            const touchX = touch.clientX - rect.left;
+            const touchY = touch.clientY - rect.top;
+            const [scaledTouchX, scaledTouchY] = this.getScaledXY(touchX, touchY);
+            
+            this.selectedGeometry = null;
+            
+            this.geometries.forEach((geometry) => {
+                if (geometry.isClicked(scaledTouchX, scaledTouchY)) {
+                    this.selectedGeometry = geometry;
+                    geometry.selected = true;
+                } else {
+                    geometry.selected = false;
+                }
+            });
+            
+            if (this.selectedGeometry) {
+                this.geometryManager.updateGeometryInfo(this.selectedGeometry);
+                this.updateCanvas();
+            }
+        }
+    }
 
   handleEscape(){
     this.selectedGeometry = null;
